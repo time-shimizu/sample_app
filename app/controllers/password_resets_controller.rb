@@ -24,7 +24,7 @@ class PasswordResetsController < ApplicationController
 
   def update
     if params[:user][:password].empty?
-      @user.erros.add(:password, :blank)
+      @user.errors.add(:password, :blank)
       render 'edit'
     elsif @user.update(user_params)
       log_in @user
@@ -36,6 +36,10 @@ class PasswordResetsController < ApplicationController
   end
 
   private
+
+    def user_params
+      params.require(:user).permit(:password, :password_confirmation)
+    end
 
     def get_user
       @user = User.find_by(email: params[:email])
